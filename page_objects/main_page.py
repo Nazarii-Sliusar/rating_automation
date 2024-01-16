@@ -19,6 +19,9 @@ class MainPage(BasePage):
     def expected_url(self):
         return self.__url
 
+    def open(self):
+        self._driver.get(self.__url)
+
     def logout_link_is_displayed(self) -> bool:
         return super()._is_displayed(self.__logout_locator)
         # return self._driver.find_element(*self.__logout_locator).is_displayed()

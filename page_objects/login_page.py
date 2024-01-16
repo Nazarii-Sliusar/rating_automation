@@ -13,6 +13,7 @@ class LoginPage(BasePage):
     __input_phone = (By.ID, 'phone')
     __input_password = (By.ID, 'password')
     __button_login = (By.XPATH, '//button[@type="submit"]')
+    __button_register = (By.XPATH, '//a[@href="/register"]')
 
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
@@ -33,3 +34,6 @@ class LoginPage(BasePage):
 
     def is_displayed_button_login(self) -> bool:
         return super()._is_displayed(self.__button_login)
+
+    def click_register(self):
+        super()._click(self.__button_register)

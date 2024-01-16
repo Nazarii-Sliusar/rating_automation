@@ -6,6 +6,8 @@ from page_objects.leave_feedback_page import LeaveFeedbackPage
 from page_objects.login_page import LoginPage
 from page_objects.main_page import MainPage
 from page_objects.read_feedback_page import ReadFeedbackPage
+from page_objects.register_page import RegisterPage
+from page_objects.enter_otp_page import EnterOtpPage
 
 
 class TestPositive:
@@ -89,7 +91,6 @@ class TestPositive:
         assert feedback_about_me_page.footer_text().strip() == 'ZariuS ® 2023 Підтримка: +380631228234', ('Footer text is '
                                                                                                   'incorrect')
 
-    @pytest.mark.debug
     @pytest.mark.positive
     @pytest.mark.parametrize('phone, password', (('+380631228234', '1234'),))
     def test_header_links(self, driver, phone, password):
@@ -105,3 +106,39 @@ class TestPositive:
         leave_feedback_page = LeaveFeedbackPage(driver)
         leave_feedback_page.click_to_main_link()
         assert main_page.current_url == main_page.expected_url(), 'Wrong current link:' + main_page.current_url
+
+    @pytest.mark.debug
+    @pytest.mark.positive
+    def test_register(self, driver):
+        main_page = MainPage(driver)
+        main_page.open()
+        login_page = LoginPage(driver)
+        assert login_page.current_url == login_page.expected_url_login(), 'Wrong URL: ' + login_page.current_url
+        login_page.click_register()
+        register_page = RegisterPage(driver)
+        assert register_page.current_url == register_page.expected_register_url(), 'Wrong URL'
+        register_page.enter_name('Test')
+        register_page.enter_surname('Test')
+        register_page.enter_password('12345678')
+        register_page.enter_phone('+380000000000')
+        assert not register_page.submit_button_is_clickable()
+        register_page.check_checkbox_agree()
+        assert register_page.submit_button_is_clickable()
+        register_page.submit()
+        enter_otp_page = EnterOtpPage(driver)
+        assert enter_otp_page.current_url == enter_otp_page.expected_url_enter_otp(), 'Wrong URL'
+        assert enter_otp_page.get_message() == ('На Ваш номер +380000000000 надіслано SMS із кодом-підтвердження. '
+                                                'Введіть код:')
+        assert enter_otp_page.enter_otp_input_is_displayed(), 'Enter OTP input is now shown'
+        assert enter_otp_page.confirm_button_is_displayed(), 'confirm button is not displayed'
+        assert enter_otp_page.timer_text() == 'Надіслати код повторно через: 60 секунд', ('seconds counter is not '
+                                                                                          'displayed')
+        assert not enter_otp_page.resend_sms_button_is_displayed(), 'resend sms button is displayed but should not be'
+        time.sleep(60)
+        assert enter_otp_page.resend_sms_button_is_displayed(), 'resend sms button is not displayed'
+        enter_otp_page.click_resend_button()
+        assert enter_otp_page.timer_text() == 'Надіслати код повторно через: 60 секунд', ('seconds counter is not '
+                                                                                          'displayed')
+        assert not enter_otp_page.resend_sms_button_is_displayed(), 'resend sms button is displayed but should not be'
+
+

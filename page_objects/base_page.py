@@ -1,4 +1,4 @@
-from selenium.common import NoSuchElementException
+from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -39,11 +39,23 @@ class BasePage:
         self._wait_until_element_is_visible(locator, time)
         self._find(locator).click()
 
-    def _is_displayed(self, locator: tuple) -> bool:
+    def _is_displayed(self, locator: tuple, time: int = 10) -> bool:
         try:
-            self._wait_until_element_is_visible(locator)
+            self._wait_until_element_is_visible(locator, time)
             return self._find(locator).is_displayed()
         except NoSuchElementException:
+            return False
+        # тут якась хуйня. треба ще раз переввірити нащо це додавати як що вже є ексепшин,
+        # але без цього  тест падає з помилкою TimeoutException
+        except TimeoutException:
+            return False
+
+    def _is_clickable(self, locator: tuple) -> bool:
+        try:
+            wait = WebDriverWait(self._driver, 0.1)
+            wait.until(expected_conditions.element_to_be_clickable(locator))
+            return True
+        except TimeoutException:
             return False
 
     def _clear(self, locator: tuple, time: int = 10):
