@@ -109,7 +109,8 @@ class TestPositive:
 
     @pytest.mark.debug
     @pytest.mark.positive
-    def test_register(self, driver):
+    @pytest.mark.parametrize('name, surname, phone, password', (('Test', 'Test', '+380000000000', '12345678'),))
+    def test_register(self, driver, name, surname, phone, password):
         main_page = MainPage(driver)
         main_page.open()
         login_page = LoginPage(driver)
@@ -117,11 +118,11 @@ class TestPositive:
         login_page.click_register()
         register_page = RegisterPage(driver)
         assert register_page.current_url == register_page.expected_register_url(), 'Wrong URL'
-        register_page.enter_name('Test')
-        register_page.enter_surname('Test')
-        register_page.enter_password('12345678')
-        register_page.enter_phone('+380000000000')
-        assert not register_page.submit_button_is_clickable()
+        register_page.enter_name(name)
+        register_page.enter_surname(surname)
+        register_page.enter_password(password)
+        register_page.enter_phone(phone)
+        assert not register_page.submit_button_is_clickable(), 'Register button is clickable but should not be'
         register_page.check_checkbox_agree()
         assert register_page.submit_button_is_clickable()
         register_page.submit()

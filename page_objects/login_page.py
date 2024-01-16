@@ -37,3 +37,5 @@ class LoginPage(BasePage):
 
     def click_register(self):
         super()._click(self.__button_register)
+        wait = WebDriverWait(self._driver, 10)
+        wait.until(expected_conditions.url_changes(self.__url_login))
