@@ -12,6 +12,7 @@ class MainPage(BasePage):
     __link_read_feedbacks = (By.XPATH, '//a[@href="/read_feedback_form"]')
     __link_leave_feedback = (By.XPATH, '//a[@href="/leave_feedback_form"]')
     __link_feedback_about_me = (By.XPATH, '//a[@href="/feedback_about_me"]')
+    __footer_locator = (By.XPATH, '//footer')
 
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
@@ -40,4 +41,7 @@ class MainPage(BasePage):
 
     def click_feedback_about_me(self):
         super()._click(self.__link_feedback_about_me)
+
+    def get_footer_text(self) -> str:
+        return super()._get_text(self.__footer_locator)
 

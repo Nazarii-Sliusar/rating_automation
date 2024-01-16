@@ -107,7 +107,6 @@ class TestPositive:
         leave_feedback_page.click_to_main_link()
         assert main_page.current_url == main_page.expected_url(), 'Wrong current link:' + main_page.current_url
 
-    @pytest.mark.debug
     @pytest.mark.positive
     @pytest.mark.parametrize('name, surname, phone, password', (('Test', 'Test', '+380000000000', '12345678'),))
     def test_register(self, driver, name, surname, phone, password):
@@ -142,4 +141,12 @@ class TestPositive:
                                                                                           'displayed')
         assert not enter_otp_page.resend_sms_button_is_displayed(), 'resend sms button is displayed but should not be'
 
-
+    @pytest.mark.debug
+    @pytest.mark.positive
+    @pytest.mark.parametrize('phone, password', (('+380631228234', '1234'),))
+    def test_other_elements_are_present_on_main_page(self, driver, phone, password):
+        login_page = LoginPage(driver)
+        login_page.open()
+        login_page.execute_login(phone, password)
+        main_page = MainPage(driver)
+        assert main_page.get_footer_text().strip() == 'ZariuS ® 2023 Підтримка: +380631228234', 'Footer text is not correct'

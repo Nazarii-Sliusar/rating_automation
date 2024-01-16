@@ -5,7 +5,7 @@ options = webdriver.ChromeOptions()
 options.add_experimental_option("detach", True)
 
 
-@pytest.fixture(params=['safari'])
+@pytest.fixture(params=['safari', 'chrome', 'edge', 'firefox'])
 # @pytest.fixture()
 def driver(request):
     # browser = request.config.getoption("--browser")
