@@ -15,6 +15,7 @@ class LoginPage(BasePage):
     __button_login = (By.XPATH, '//button[@type="submit"]')
     __button_register = (By.XPATH, '//a[@href="/register"]')
 
+
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
@@ -28,6 +29,12 @@ class LoginPage(BasePage):
         super()._click(self.__button_login)
         wait = WebDriverWait(self._driver, 10)
         wait.until(expected_conditions.url_changes(self.__url_login))
+
+    def execute_negative_login(self, phone: str, password: str,):
+        super()._clear(self.__input_phone)
+        super()._send_keys(self.__input_phone, phone)
+        super()._send_keys(self.__input_password, password)
+        super()._click(self.__button_login)
 
     def expected_url_login(self) -> str:
         return self.__url_login

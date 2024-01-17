@@ -49,6 +49,7 @@ class RegisterPage(BasePage):
         wait = WebDriverWait(self._driver, 10)
         wait.until(expected_conditions.url_changes(self.__url_register))
 
-
+    def submit_no_wait(self):
+        super()._click(self.__button_submit)
 
 

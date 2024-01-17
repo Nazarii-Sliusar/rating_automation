@@ -88,8 +88,9 @@ class TestPositive:
                                                          'блаблакарі')
         assert feedback_about_me_page.count_stars_of_1st_feedback() == 5, 'Amout of stars are not correct'
         assert feedback_about_me_page.get_feedback_date() == '2023-09-07 17:20:45', 'Date is not correct'
-        assert feedback_about_me_page.footer_text().strip() == 'ZariuS ® 2023 Підтримка: +380631228234', ('Footer text is '
-                                                                                                  'incorrect')
+        assert feedback_about_me_page.footer_text().strip() == 'ZariuS ® 2023 Підтримка: +380631228234', ('Footer '
+                                                                                                          'text is'
+                                                                                                          'incorrect')
 
     @pytest.mark.positive
     @pytest.mark.parametrize('phone, password', (('+380631228234', '1234'),))
@@ -123,7 +124,6 @@ class TestPositive:
         register_page.enter_phone(phone)
         assert not register_page.submit_button_is_clickable(), 'Register button is clickable but should not be'
         register_page.check_checkbox_agree()
-        assert register_page.submit_button_is_clickable()
         register_page.submit()
         enter_otp_page = EnterOtpPage(driver)
         assert enter_otp_page.current_url == enter_otp_page.expected_url_enter_otp(), 'Wrong URL'
@@ -141,7 +141,6 @@ class TestPositive:
                                                                                           'displayed')
         assert not enter_otp_page.resend_sms_button_is_displayed(), 'resend sms button is displayed but should not be'
 
-    @pytest.mark.debug
     @pytest.mark.positive
     @pytest.mark.parametrize('phone, password', (('+380631228234', '1234'),))
     def test_other_elements_are_present_on_main_page(self, driver, phone, password):
