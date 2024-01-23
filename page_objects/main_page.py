@@ -11,6 +11,8 @@ class MainPage(BasePage):
     __logout_locator = (By.XPATH, '//a[@href="/logout"]')
     __link_read_feedbacks = (By.XPATH, '//a[@href="/read_feedback_form"]')
     __link_leave_feedback = (By.XPATH, '//a[@href="/leave_feedback_form"]')
+    __link_feedback_about_me = (By.XPATH, '//a[@href="/feedback_about_me"]')
+    __footer_locator = (By.XPATH, '//footer')
 
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
@@ -18,18 +20,28 @@ class MainPage(BasePage):
     def expected_url(self):
         return self.__url
 
-    def logout_link_is_displayed(self) -> bool:
-        return self._driver.find_element(*self.__logout_locator).is_displayed()
+    def open(self):
+        self._driver.get(self.__url)
 
-    def logout(self, time: int = 10):
-        wait = WebDriverWait(self._driver, time)
-        wait.until(expected_conditions.element_to_be_clickable(self.__logout_locator))
-        self._driver.find_element(*self.__logout_locator).click()
+    def logout_link_is_displayed(self) -> bool:
+        return super()._is_displayed(self.__logout_locator)
+        # return self._driver.find_element(*self.__logout_locator).is_displayed()
+
+    def logout(self):
+        super()._click(self.__logout_locator)
+        wait = WebDriverWait(self._driver, 10)
         wait.until(expected_conditions.url_changes('https://www.rating.in.ua/logout'))
         wait.until(expected_conditions.url_changes('https://www.rating.in.ua/'))
 
     def click_leave_feedback_form(self):
-        self._driver.find_element(*self.__link_leave_feedback).click()
+        super()._click(self.__link_leave_feedback)
 
     def click_read_feedback_link(self):
-        self._driver.find_element(*self.__link_read_feedbacks).click()
+        super()._click(self.__link_read_feedbacks)
+
+    def click_feedback_about_me(self):
+        super()._click(self.__link_feedback_about_me)
+
+    def get_footer_text(self) -> str:
+        return super()._get_text(self.__footer_locator)
+
