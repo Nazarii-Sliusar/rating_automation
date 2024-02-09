@@ -121,6 +121,7 @@ class TestPositive:
         register_page.enter_name(name)
         register_page.enter_surname(surname)
         register_page.enter_password(password)
+        register_page.enter_confirm_password(password)
         register_page.enter_phone(phone)
         assert not register_page.submit_button_is_clickable(), 'Register button is clickable but should not be'
         register_page.check_checkbox_agree()

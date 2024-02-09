@@ -32,7 +32,9 @@ class RegisterPage(BasePage):
 
     def enter_password(self, password):
         super()._send_keys(self.__input_password, password)
-        super()._send_keys(self.__input_confirmation_password, password)
+
+    def enter_confirm_password(self, confirm_password):
+        super()._send_keys(self.__input_confirmation_password, confirm_password)
 
     def enter_phone(self, phone):
         super()._clear(self.__input_phone)
@@ -51,5 +53,8 @@ class RegisterPage(BasePage):
 
     def submit_no_wait(self):
         super()._click(self.__button_submit)
+
+    def open(self):
+        self._driver.get(self.__url_register)
 
 
