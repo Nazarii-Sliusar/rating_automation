@@ -22,6 +22,9 @@ class LoginPage(BasePage):
     def open(self):
         self._driver.get(self.__url_domain)
 
+    def open_login(self):
+        self._driver.get(self.__url_login)
+
     def execute_login(self, phone: str, password: str,):
         super()._clear(self.__input_phone)
         super()._send_keys(self.__input_phone, phone)

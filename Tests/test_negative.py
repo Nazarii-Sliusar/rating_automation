@@ -20,7 +20,6 @@ class TestNegative:
         assert login_page.current_url == login_page.expected_url_login(), 'Wrong URL'
         assert login_page.get_alert_text.strip() == 'Невірні авторизаційні дані', 'wrong alert message'
 
-    @pytest.mark.debug
     @pytest.mark.negative
     @pytest.mark.parametrize('name, surname, phone, password, confirm_password', (('Test', 'Test', '+380000000000', '1111', '2222'),))
     def test_registering_with_different_confirmation_password(self, driver, name, surname, phone, password, confirm_password):
@@ -34,7 +33,7 @@ class TestNegative:
         register_page.check_checkbox_agree()
         register_page.submit_no_wait()
         assert register_page.current_url == 'https://www.rating.in.ua/register', 'wrong url link'
-        assert register_page.get_alert_text == 'Паролі не збігаються', 'wrong alert message'
+        assert register_page.get_alert_text.strip() == 'Паролі не збігаються', 'wrong alert message'
 
 
     @pytest.mark.negative
@@ -58,7 +57,7 @@ class TestNegative:
                                                         'Підтримка: +380631228234')
 
     @pytest.mark.negative
-    @pytest.mark.parametrize('phone, password', (('+38063', '12345678'),))
+    @pytest.mark.parametrize('phone, password', (('+380', '1111'), ('+38000000000', '1111'), ('+3800000000000', '1111')))
     def test_error_appears_on_login_if_phone_not_13(self, driver, phone, password):
         main_page = MainPage(driver)
         main_page.open()
@@ -68,5 +67,20 @@ class TestNegative:
         assert login_page.get_alert_text.strip() == ('Ви ввели невірний формат телефону. Вкажіть номер телефону у '
                                                      'форматі +380...'), 'wrong alert message'
 
-
-
+    @pytest.mark.debug
+    @pytest.mark.negative
+    @pytest.mark.parametrize('name, surname, phone, password', (('Test', 'Test', '+38063122823', '12345678'),))
+    def test_error_appears_on_register_if_phone_not_13(self, driver, name, surname, phone, password):
+        register_page = RegisterPage(driver)
+        register_page.open()
+        register_page.enter_name(name)
+        register_page.enter_surname(surname)
+        register_page.enter_password(password)
+        register_page.enter_confirm_password(password)
+        register_page.enter_phone(phone)
+        register_page.check_checkbox_agree()
+        register_page.submit_no_wait()
+        assert register_page.current_url == register_page.expected_register_url(), 'Wrong URL'
+        assert register_page.get_alert_text.strip() == ('Ви ввели невірний формат телефону. Вкажіть номер телефону у '
+                                                        'форматі +380...')
+        time.sleep(3)
