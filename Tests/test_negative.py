@@ -83,4 +83,3 @@ class TestNegative:
         assert register_page.current_url == register_page.expected_register_url(), 'Wrong URL'
         assert register_page.get_alert_text.strip() == ('Ви ввели невірний формат телефону. Вкажіть номер телефону у '
                                                         'форматі +380...')
-        time.sleep(3)
